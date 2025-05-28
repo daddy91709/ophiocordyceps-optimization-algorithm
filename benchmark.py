@@ -145,7 +145,7 @@ def modified_inverted_dtlz7(x):
 
 # -- FUNCTIONS MAPS --
 def functions_map():
-    return {
+    return {'''
         # MULTIMODAL NON-SEPARABLE FUNCTIONS
         "Ackley": ackley,
         "Cross-in-tray": cross_in_tray,
@@ -166,7 +166,7 @@ def functions_map():
         "Beale": beale,
         "Dixon-Price": dixon_price,
         "Matyas": matyas,
-        "Schwefel 1.2": schwefel_12,
+        "Schwefel 1.2": schwefel_12, '''
         "Schwefel 2.22": schwefel_222,
         "Colville": colville,
         "Zakharov": zakharov,
