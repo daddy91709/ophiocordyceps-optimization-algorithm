@@ -187,6 +187,28 @@ def functions_map():
         "Modified Inverted DTLZ7": modified_inverted_dtlz7
     }
 
+def fixed_dim_functions_map():
+    return {
+        # MULTIMODAL NON-SEPARABLE FUNCTIONS (2D fisse)
+        'Cross-in-tray': 2,      # usa x[0], x[1]
+        'Goldstein-Price': 2,    # usa x[0], x[1] 
+        'McCormick': 2,          # usa x[0], x[1]
+        'Schaffer N2': 2,        # usa x[0], x[1]
+        
+        # MULTIMODAL SEPARABLE FUNCTIONS (2D fisse)
+        'Bohachevsky': 2,        # usa x[0], x[1]
+        'Bukin N4': 2,           # usa x[0], x[1]
+        'Three-hump Camel': 2,   # usa x[0], x[1]
+        'Booth': 2,              # usa x[0], x[1]
+        
+        # UNIMODAL NON-SEPARABLE FUNCTIONS
+        'Beale': 2,              # usa x[0], x[1]
+        'Matyas': 2,             # usa x[0], x[1]
+        'Colville': 4,           # usa x1, x2, x3, x4 (4D fissa)
+        'Easom': 2,              # usa x[0], x[1]
+    }
+
+
 def best_values_map():
     return {
         # MULTIMODAL NON-SEPARABLE FUNCTIONS
