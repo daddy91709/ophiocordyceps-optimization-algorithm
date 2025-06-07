@@ -223,7 +223,7 @@ def best_values_map():
         "Bohachevsky": 0,
         "Bukin N4": 0,
         "Csendes": 0,
-        "Deb1": 0,                 # funzione di minimizzazione negativa, minimo -1
+        "Deb1": -1,                 # funzione di minimizzazione negativa, minimo -1
         "Three-hump Camel": 0,
         "Booth": 0,
         
@@ -243,7 +243,7 @@ def best_values_map():
         "Powell Sum": 0,
         "Schumer Steiglitz": 0,
         "Step": 0,
-        "StepInt": 25,  
+        "StepInt": None,  # non ha un minimo globale definito
         "Sum Squares": 0,
         "Sphere": 0,
         
@@ -258,7 +258,7 @@ def bounds_map():
         "Ackley": (-5, 5),
         "Cross-in-tray": (-10, 10),
         "Goldstein-Price": (-2, 2),
-        "McCormick": (-3, 4),
+        "McCormick": ([-1.5, -3], [4, 4]),
         "Schaffer N2": (-100, 100),
         
         # MULTIMODAL SEPARABLE FUNCTIONS
