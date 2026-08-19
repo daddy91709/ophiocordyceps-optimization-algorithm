@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ophiocordyceps-optimizer"
+version = "2.0.0"
+description = "Ophiocordyceps Optimization Algorithm (OOA) - Meta-Hyphal Architecture for Complex Global Optimization"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Ophiocordyceps Research Team"}
+]
+keywords = [
+    "optimization",
+    "metaheuristic",
+    "global-optimization",
+    "cec2014",
+    "bio-inspired",
+    "gpu-acceleration",
+    "pytorch"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "numpy>=1.20.0",
+    "pandas>=1.3.0",
+    "torch>=2.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "matplotlib>=3.5.0",
+    "opfunu>=1.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/daddy91709/ophiocordyceps-optimization-algorithm"
+Repository = "https://github.com/daddy91709/ophiocordyceps-optimization-algorithm"
