@@ -1,2 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
 # VS Code settings
 .vscode/
+
+# System / Scratch
+.system_generated/
+scratch/
