@@ -1,42 +1,59 @@
 # Ophiocordyceps Optimization Algorithm (OOA)
 
-A bio-inspired metaheuristic optimization algorithm based on the biological behavior and life cycle of the **Ophiocordyceps** fungus (*zombie-ant fungus*).
+A bio-inspired metaheuristic optimization algorithm based on the biological behavior and life cycle of the **Ophiocordyceps** fungus (*zombie-ant fungus*), featuring **multi-core CPU parallelization** and **GPU acceleration support**.
 
 ---
 
 ## 🐜 Biological Inspiration
 
 The algorithm models the natural interaction between the *Ophiocordyceps* fungus and ant hosts:
-- **Exploration (Healthy Ants)**: Uninfected ants perform random stochastic walks (Brownian motion / Levy flights) to explore the solution space.
-- **Exploitation (Infected Ants)**: Ants become infected over time; their movement is manipulated by gradient estimation towards promising fitness regions combined with social attraction towards the best-known solution.
-- **Death & Spore Dispersal**: Infected ants that fail to find improvements eventually die and release spores in their area.
-- **Population Renewal**: New ants spawn near productive regions to maintain diversity and prevent stagnation.
+- **Exploration (Healthy Ants)**: Uninfected ants perform random stochastic walks (Brownian motion / Levy flights) to explore the search space.
+- **Exploitation (Infected Ants)**: Ants become infected over time; their movement is guided by numerical gradient estimation towards optimal fitness regions combined with social attraction towards the best-known position.
+- **Death & Spore Dispersal**: Infected ants that stagnate without improvements eventually die and release spores in their area.
+- **Population Renewal**: New ants spawn near productive spore regions to maintain population diversity and avoid local minima traps.
+
+---
+
+## ⚡ Performance & Acceleration Architecture
+
+- **Multi-Core CPU Parallelism**:
+  - `run_benchmark.py`: Distributes independent optimization runs across all available CPU cores (e.g. 11-12 parallel workers on 12-core systems) with linear speedups.
+  - `src/ophiocordyceps.py`: Multi-threaded batch evaluation of fitness and gradients (`n_workers` parameter) for complex functions.
+- **GPU & Tensor Acceleration (`src/gpu_backend.py`)**:
+  - Hardware discovery engine (`src/device.py`) auto-detects NVIDIA CUDA GPUs, Intel/AMD DirectML, Apple Silicon MPS, or CPU vectorization.
+  - Population-wide tensor operations (bounds clipping, random normal draws, gradient updates).
 
 ---
 
 ## 📂 Repository Structure
 
 ```
-.
-├── src/
-│   ├── __init__.py                # Package exports (Ant, ophiocordyceps, benchmark)
-│   ├── ophiocordyceps.py          # Core optimization algorithm implementation
-│   ├── benchmark.py               # Benchmark test functions (Ackley, Sphere, Alpine1, etc.)
-│   └── analysis.py                # Results loading, statistical analysis, and plotting utilities
+ophiocordyceps-optimization-algorithm/
 │
-├── notebooks/
-│   ├── demo.ipynb                 # Interactive demo notebook explaining the algorithm
+├── src/                                  # Source modules
+│   ├── __init__.py                       # Package exports
+│   ├── ophiocordyceps.py                 # Core algorithm with multi-worker CPU evaluation
+│   ├── gpu_backend.py                    # GPU tensor backend (PyTorch / CuPy / DirectML)
+│   ├── device.py                         # Hardware discovery & device capability engine
+│   ├── benchmark.py                      # Benchmark test functions (Ackley, Sphere, Alpine1, etc.)
+│   └── analysis.py                       # Statistical analysis and visualization utilities
+│
+├── notebooks/                            # Interactive Notebooks
+│   ├── demo.ipynb                        # Interactive tutorial explaining algorithm & parallelism
 │   ├── ophiocordyceps-optimization-algorithm.ipynb # Original notebook
-│   └── print-graphs.ipynb         # Graphs notebook
+│   └── print-graphs.ipynb                # Results plotting notebook
+│
+├── tests/                                # Test Suite
+│   └── test_ophiocordyceps.py            # Unit & integration tests
 │
 ├── results/
-│   └── risultati.csv              # Benchmark results output
+│   └── risultati.csv                     # Benchmark results output
 │
-├── main.py                        # Standalone demo & quick-test script
-├── run_benchmark.py               # Configurable benchmark runner CLI
-├── analyze_results.py             # Benchmark results analysis CLI
-├── requirements.txt               # Project dependencies
-└── README.md                      # Documentation
+├── main.py                               # Quick demo & hardware check CLI
+├── run_benchmark.py                      # Multi-core parallel benchmark runner CLI
+├── analyze_results.py                    # Benchmark results analysis CLI
+├── requirements.txt                      # Project dependencies
+└── README.md                             # Documentation
 ```
 
 ---
@@ -45,39 +62,44 @@ The algorithm models the natural interaction between the *Ophiocordyceps* fungus
 
 ### 1. Installation
 
-Install the required dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Quick Demo (Standard Python)
+### 2. Quick Demo & Hardware Check
 
-Run a fast optimization test across benchmark functions directly from the command line:
+Run the optimization demo with hardware auto-detection:
 ```bash
 python main.py
 ```
 
-### 3. Running Benchmarks
+### 3. Running Multi-Core Parallel Benchmarks
 
-Execute the automated benchmark suite:
+Run the benchmark suite in parallel across all CPU cores (`-j -1` or specify worker count):
 ```bash
-# Run benchmark on default functions (Ackley, Sphere, Alpine1)
-python run_benchmark.py
+# Auto-parallel benchmark on default functions across all CPU cores
+python run_benchmark.py -j -1
 
 # Custom benchmark execution
-python run_benchmark.py --funcs Ackley Sphere Booth --dims 2 10 30 --runs 10
+python run_benchmark.py --funcs Ackley Sphere Alpine1 Bohachevsky --dims 2 10 30 --runs 10 --jobs 8
 ```
 
-### 4. Analyzing Results
+### 4. Running the Test Suite
+
+```bash
+python -m pytest tests/
+```
+
+### 5. Analyzing Results
 
 Inspect and summarize the benchmark results:
 ```bash
 python analyze_results.py --csv results/risultati.csv
 ```
 
-### 5. Interactive Demo Notebook
+### 6. Interactive Demo Notebook
 
-Open the demo notebook in Jupyter for visual step-by-step explanations:
+Launch Jupyter Notebook to explore the interactive visual guide:
 ```bash
 jupyter notebook notebooks/demo.ipynb
 ```
@@ -91,17 +113,17 @@ import numpy as np
 from src.ophiocordyceps import ophiocordyceps
 import src.benchmark as bm
 
-# Optimize a 2D Ackley function
+# Optimize a 10D Sphere function using 4 parallel CPU evaluation workers
 best_ant = ophiocordyceps(
-    n_ants=30,
-    n_dims=2,
-    lower_bound=[-5, -5],
-    upper_bound=[5, 5],
-    fitness=bm.ackley,
+    n_ants=40,
+    n_dims=10,
+    lower_bound=[-5.12] * 10,
+    upper_bound=[5.12] * 10,
+    fitness=bm.sphere,
     minimization=True,
     use_best_guidance=True,
-    verbose=True,
-    max_iter=50
+    max_iter=50,
+    n_workers=4
 )
 
 print(f"Best fitness: {best_ant.fitness:.6f}")
